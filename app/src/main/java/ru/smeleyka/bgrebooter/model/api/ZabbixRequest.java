@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ZabbixRequest extends Repo{
-    public Observable<String[]> getLoginAnswer(String loginRequest)
+    public Observable<String> getLoginAnswer(String loginRequest)
     {
         return getApi().getLoginAnswer(loginRequest).subscribeOn(Schedulers.io());
     }

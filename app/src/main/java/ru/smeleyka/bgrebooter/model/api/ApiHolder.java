@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiHolder
 {
@@ -26,9 +27,12 @@ public class ApiHolder
     {
         api = new Retrofit.Builder()
                 .baseUrl("https://isp.vbg.ru/zabbix/")
+                //.baseUrl("http://192.168.5.101:8000/")
+                //.baseUrl("http://httpbin.org/")
                 .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
+                //.addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
                 .create(ApiService.class);
     }

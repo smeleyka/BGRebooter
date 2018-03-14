@@ -7,7 +7,7 @@ import ru.smeleyka.bgrebooter.model.entity.Zobject;
 
 public class UserRepo extends Repo
 {
-    public Observable<String[]> getUser(String loginRequest)
+    public Observable<String> getUser(String loginRequest)
     {
         return getApi().getLoginAnswer(loginRequest).subscribeOn(Schedulers.io());
     }

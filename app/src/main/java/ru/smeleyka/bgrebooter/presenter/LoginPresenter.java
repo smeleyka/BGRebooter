@@ -8,6 +8,10 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 
 import io.reactivex.Scheduler;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Response;
 import ru.smeleyka.bgrebooter.model.api.ApiHolder;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
 import ru.smeleyka.bgrebooter.model.entity.LoginRequest;
@@ -31,8 +35,13 @@ public class LoginPresenter {
     }
 
     public void login(String login, String password){
-        String loginRequest = new GsonBuilder().create().toJson(new LoginRequest(login,password));
+        String loginRequest = new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(login,password));
         Log.d(TAG,loginRequest);
-        zabbixRequest.getLoginAnswer(loginRequest).observeOn(mainThread).subscribe(s -> Log.d(TAG, Arrays.toString(s)));
+        zabbixRequest
+                .getLoginAnswer(loginRequest)
+                .observeOn(mainThread)
+                .subscribe(s -> Log.d(TAG, s),throwable -> Log.d(TAG,throwable.getMessage()));
     }
+
+
 }
