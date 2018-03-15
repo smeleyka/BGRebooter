@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">БГ.Грузилка</string>
+    <string name="action_sign_in">Получить Доступ</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="reboot">Перезагрузка</string>
+</resources>

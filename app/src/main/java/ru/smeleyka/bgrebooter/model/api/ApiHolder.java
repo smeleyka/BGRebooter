@@ -22,6 +22,7 @@ public class ApiHolder
     }
 
     private ApiService api;
+    private ApiService testApi;
 
     private ApiHolder()
     {
@@ -31,7 +32,13 @@ public class ApiHolder
                 //.baseUrl("http://httpbin.org/")
                 .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .build()
+                .create(ApiService.class);
+        testApi = new Retrofit.Builder()
+                .baseUrl("https://isp.vbg.ru/zabbix/")
+                .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
                 .create(ApiService.class);
@@ -41,4 +48,9 @@ public class ApiHolder
     {
         return api;
     }
+    public ApiService getTestApi()
+    {
+        return testApi;
+    }
+
 }

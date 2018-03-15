@@ -1,9 +1,13 @@
 package ru.smeleyka.bgrebooter.model.api;
 
-public class Repo
+abstract public class Repo
 {
     protected ApiService getApi()
     {
         return ApiHolder.getInstance().getApi();
+    }
+    protected ApiService getTestApi()
+    {
+        return ApiHolder.getInstance().getTestApi();
     }
 }

@@ -5,4 +5,8 @@ package ru.smeleyka.bgrebooter.view;
  */
 
 public interface LoginView {
+
+    void showError(String message);
+
+    void onLoginOk(String message);
 }
