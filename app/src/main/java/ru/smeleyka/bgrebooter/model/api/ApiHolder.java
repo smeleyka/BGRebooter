@@ -22,23 +22,14 @@ public class ApiHolder
     }
 
     private ApiService api;
-    private ApiService testApi;
 
     private ApiHolder()
     {
         api = new Retrofit.Builder()
                 .baseUrl("https://isp.vbg.ru/zabbix/")
-                //.baseUrl("http://192.168.5.101:8000/")
-                //.baseUrl("http://httpbin.org/")
                 .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
-                .build()
-                .create(ApiService.class);
-        testApi = new Retrofit.Builder()
-                .baseUrl("https://isp.vbg.ru/zabbix/")
-                .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                //.addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
                 .create(ApiService.class);
@@ -47,10 +38,6 @@ public class ApiHolder
     public ApiService getApi()
     {
         return api;
-    }
-    public ApiService getTestApi()
-    {
-        return testApi;
     }
 
 }

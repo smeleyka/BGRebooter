@@ -5,4 +5,11 @@ package ru.smeleyka.bgrebooter.view;
  */
 
 public interface RebootView {
+    void showResult(String result);
+
+    void showError(String message);
+
+    void showLoading();
+
+    void hideLoading();
 }

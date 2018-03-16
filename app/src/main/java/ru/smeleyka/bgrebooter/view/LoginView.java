@@ -9,4 +9,8 @@ public interface LoginView {
     void showError(String message);
 
     void onLoginOk(String message);
+
+    void showLoading();
+
+    void hideLoading();
 }

@@ -25,8 +25,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @BindView(R.id.login)                   EditText loginEditText;
     @BindView(R.id.password)                EditText passwordEditText;
-    @BindView(R.id.email_sign_in_button)    Button signInButton;
-    @BindView(R.id.login_progress)          ProgressBar loginProgress;
+    @BindView(R.id.sign_in_button)    Button signInButton;
+    @BindView(R.id.login_activity_progress)          ProgressBar loginProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +36,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         loginPresenter = new LoginPresenter(this, AndroidSchedulers.mainThread());
     }
 
-    @OnClick(R.id.email_sign_in_button)
+    @OnClick(R.id.sign_in_button)
     public void onSignButton() {
-        loginProgress.setVisibility(View.VISIBLE);
-
-        loginPresenter.testLogin(
-                    loginEditText.getText().toString(),
-                    passwordEditText.getText().toString());
-
         loginPresenter.login(
                 loginEditText.getText().toString(),
                 passwordEditText.getText().toString()
@@ -52,7 +46,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void showError(String message) {
-        loginProgress.setVisibility(View.INVISIBLE);
         new AlertDialog
                 .Builder(this)
                 .setTitle(message)
@@ -63,10 +56,21 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void onLoginOk(String auth) {
-        loginProgress.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(this, RebootActivity.class);
-        intent.putExtra(Constants.EXTRA_MESSAGE, auth);
+        intent.putExtra(Constants.EXTRA_AUTH, auth);
         startActivity(intent);
         Log.d(TAG,auth);
+    }
+
+    @Override
+    public void showLoading() {
+        loginProgress.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideLoading() {
+        loginProgress.setVisibility(View.INVISIBLE);
+
     }
 }

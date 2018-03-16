@@ -6,8 +6,4 @@ abstract public class Repo
     {
         return ApiHolder.getInstance().getApi();
     }
-    protected ApiService getTestApi()
-    {
-        return ApiHolder.getInstance().getTestApi();
-    }
 }

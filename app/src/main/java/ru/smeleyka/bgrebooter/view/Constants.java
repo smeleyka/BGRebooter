@@ -5,5 +5,5 @@ package ru.smeleyka.bgrebooter.view;
  */
 
 public class Constants {
-    public static final String EXTRA_MESSAGE = "ru.smeleyka.bgrebooter.AUTH";
+    public static final String EXTRA_AUTH = "ru.smeleyka.bgrebooter.AUTH";
 }

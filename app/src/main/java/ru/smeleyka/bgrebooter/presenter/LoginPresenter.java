@@ -29,42 +29,29 @@ public class LoginPresenter {
     }
 
     public void login(String login, String password){
+        loginView.showLoading();
         String loginRequest = new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(login,password));
         Log.d(TAG,loginRequest);
         zabbixRequest
                 .getLoginAnswer(loginRequest)
                 .observeOn(mainThread)
-                .subscribe(s -> {
-                    Log.d(TAG,  s.getJsonrpc());
-//                    if ( s.getError()!=null){
-//                        loginView.showError(s.getError().getMessage());
-//                    }
-
-                }, throwable -> Log.d(TAG,throwable.getMessage()));
-    }
-
-    public void testLogin(String login, String password){
-        String loginRequest = new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(login,password));
-        Log.d(TAG,loginRequest);
-        zabbixRequest
-                .getTestAnswer(loginRequest)
-                .observeOn(mainThread)
                 .subscribe(
                         s -> {Log.d(TAG,  s);
-                        LoginResponse loginResp = new GsonBuilder().create().fromJson(s,LoginResponse.class);
-                        if(loginResp.getResult()!=null){
-                            loginView.onLoginOk(loginResp.getResult());
-                        }
-                        else {
-                            loginView.showError(loginResp.getError().getData());
-                        }},
+                            LoginResponse loginResp = new GsonBuilder().create().fromJson(s,LoginResponse.class);
+                            if(loginResp.getResult()!=null){
+                                loginView.onLoginOk(loginResp.getResult());
+                                loginView.hideLoading();
+
+                            }
+                            else {
+                                loginView.showError(loginResp.getError().getData());
+                                loginView.hideLoading();
+
+                            }},
                         throwable -> {Log.d(TAG,throwable.getMessage());
                             loginView.showError(throwable.getMessage());
+                            loginView.hideLoading();
                         }
                 );
-        String json = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"Invalid params.\",\"data\":\"Login name or password is incorrect.\"},\"id\":1}";
-
-        LoginResponse loginResp = new GsonBuilder().create().fromJson(json,LoginResponse.class);
-        Log.d(TAG,loginResp.getError().getData());
     }
 }
