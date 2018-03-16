@@ -5,4 +5,5 @@
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
     <string name="reboot">Перезагрузка</string>
+    <string name="dialog_ok">OK</string>
 </resources>
