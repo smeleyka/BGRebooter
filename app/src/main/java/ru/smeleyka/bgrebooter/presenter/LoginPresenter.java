@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import io.reactivex.Scheduler;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
+import ru.smeleyka.bgrebooter.model.entity.AuthKeyCheckRequest;
 import ru.smeleyka.bgrebooter.model.entity.LoginRequest;
 import ru.smeleyka.bgrebooter.model.entity.LoginResponse;
 import ru.smeleyka.bgrebooter.view.LoginView;
@@ -33,25 +34,57 @@ public class LoginPresenter {
         String loginRequest = new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(login,password));
         Log.d(TAG,loginRequest);
         zabbixRequest
-                .getLoginAnswer(loginRequest)
+                .senRequestToZabbixServer(loginRequest)
                 .observeOn(mainThread)
                 .subscribe(
-                        s -> {Log.d(TAG,  s);
-                            LoginResponse loginResp = new GsonBuilder().create().fromJson(s,LoginResponse.class);
-                            if(loginResp.getResult()!=null){
-                                loginView.onLoginOk(loginResp.getResult());
+                        s -> {
+                            Log.d(TAG,  s);
+                            LoginResponse loginResponse = new GsonBuilder().create().fromJson(s,LoginResponse.class);
+                            if(loginResponse.getResult()!=null){
+                                loginView.onLoginOk(loginResponse.getResult());
                                 loginView.hideLoading();
 
                             }
                             else {
-                                loginView.showError(loginResp.getError().getData());
+                                loginView.showError(loginResponse.getError().getData());
                                 loginView.hideLoading();
 
                             }},
-                        throwable -> {Log.d(TAG,throwable.getMessage());
+                        throwable -> {
+                            Log.d(TAG,throwable.getMessage());
                             loginView.showError(throwable.getMessage());
                             loginView.hideLoading();
                         }
                 );
+    }
+    public void checkAuthKey(String authKey){
+        loginView.showLoading();
+        String authCheckRequest = new GsonBuilder().serializeNulls().create().toJson(new AuthKeyCheckRequest(authKey));
+        Log.d(TAG,authCheckRequest);
+        zabbixRequest
+                .senRequestToZabbixServer(authCheckRequest)
+                .observeOn(mainThread)
+                .subscribe(
+                        s -> {
+                            Log.d(TAG,  s);
+                            LoginResponse loginResponse = new GsonBuilder().create().fromJson(s,LoginResponse.class);
+                            if(loginResponse.getResult()!=null){
+                                loginView.onLoginOk(loginResponse.getResult());
+                                loginView.hideLoading();
+
+                            }
+                            else {
+                                loginView.showError(loginResponse.getError().getData());
+                                loginView.hideLoading();
+
+                            }},
+                        throwable -> {
+                            Log.d(TAG,throwable.getMessage());
+                            loginView.showError(throwable.getMessage());
+                            loginView.hideLoading();
+                        }
+                );
+
+
     }
 }

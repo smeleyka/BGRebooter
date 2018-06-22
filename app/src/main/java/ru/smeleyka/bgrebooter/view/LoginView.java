@@ -8,7 +8,11 @@ public interface LoginView {
 
     void showError(String message);
 
-    void onLoginOk(String message);
+    //If yes should return authKey
+    //If none, should return authKey = "empty"
+    String isLoggedIn();
+
+    void onLoginOk(String authKey);
 
     void showLoading();
 

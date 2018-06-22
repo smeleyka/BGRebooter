@@ -41,9 +41,9 @@ public class RebootPresenter {
     public void ping(){
         rebootView.showLoading();
         Log.d(TAG,auth);
-        String scriptRequest = new GsonBuilder().create().toJson(new ScriptExecuteRequest(auth,1,12112));
+        String scriptRequest = new GsonBuilder().create().toJson(new ScriptExecuteRequest(auth,1,10271));
         Log.d(TAG,scriptRequest);
-        zabbixRequest.getLoginAnswer(scriptRequest)
+        zabbixRequest.senRequestToZabbixServer(scriptRequest)
                 .observeOn(mainThread)
                 .subscribe(
                         s -> {Log.d(TAG,  s);

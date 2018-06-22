@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +22,7 @@ import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 
 public class RebootActivity extends AppCompatActivity implements RebootView {
     RebootPresenter rebootPresenter;
+
 
     @BindView(R.id.reboot_button)   Button rebootButton;
     @BindView(R.id.result_tv)       TextView resultTextView;

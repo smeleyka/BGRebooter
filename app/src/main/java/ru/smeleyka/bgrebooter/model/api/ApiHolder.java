@@ -26,7 +26,7 @@ public class ApiHolder
     private ApiHolder()
     {
         api = new Retrofit.Builder()
-                .baseUrl("https://isp.vbg.ru/zabbix/")
+                .baseUrl("http://zabbix.vbg.ru")
                 .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 //.addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))

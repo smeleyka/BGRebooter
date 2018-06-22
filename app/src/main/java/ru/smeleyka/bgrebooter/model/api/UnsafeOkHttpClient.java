@@ -1,6 +1,7 @@
 package ru.smeleyka.bgrebooter.model.api;
 
 import java.security.cert.CertificateException;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -52,7 +53,11 @@ public class  UnsafeOkHttpClient {
                 }
             });
 
-            OkHttpClient okHttpClient = builder.build();
+            OkHttpClient okHttpClient = builder
+                    .connectTimeout(20, TimeUnit.SECONDS)
+                    .writeTimeout(20, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .build();
             return okHttpClient;
         } catch (Exception e) {
             throw new RuntimeException(e);
