@@ -17,7 +17,7 @@ public class App extends Application{
     public void onCreate() {
         super.onCreate();
         instance = this;
-        appComponent = DaggerAppComponent.builder().sharedPreferencesModule(new SharedPreferencesModule(this)).build();
+        appComponent = DaggerAppComponent.builder().contextModule(new ContextModule(this)).build();
 
     }
 
