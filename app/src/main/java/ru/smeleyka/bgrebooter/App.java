@@ -4,6 +4,8 @@ import android.app.Application;
 
 import ru.smeleyka.bgrebooter.di.AppComponent;
 import ru.smeleyka.bgrebooter.di.DaggerAppComponent;
+import ru.smeleyka.bgrebooter.di.modules.ContextModule;
+import ru.smeleyka.bgrebooter.di.modules.SharedPreferencesModule;
 
 public class App extends Application{
 
@@ -15,7 +17,7 @@ public class App extends Application{
     public void onCreate() {
         super.onCreate();
         instance = this;
-        appComponent = DaggerAppComponent.builder().build();
+        appComponent = DaggerAppComponent.builder().sharedPreferencesModule(new SharedPreferencesModule(this)).build();
 
     }
 

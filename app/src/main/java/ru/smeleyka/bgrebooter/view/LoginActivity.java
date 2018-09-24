@@ -6,6 +6,7 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.App;
 import ru.smeleyka.bgrebooter.R;
+import ru.smeleyka.bgrebooter.model.data.DataManager;
 import ru.smeleyka.bgrebooter.presenter.LoginPresenter;
 
 import android.content.Context;
@@ -20,10 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import javax.inject.Inject;
+
 public class LoginActivity extends AppCompatActivity implements LoginView {
     public static final String TAG = "LoginActivity.class";
-
-
     private LoginPresenter loginPresenter;
 
     @BindView(R.id.login)                   EditText loginEditText;
@@ -31,14 +32,16 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @BindView(R.id.sign_in_button)          Button signInButton;
     @BindView(R.id.login_activity_progress) ProgressBar loginProgress;
 
+    @Inject DataManager dataManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this);
         loginPresenter = new LoginPresenter(this, AndroidSchedulers.mainThread());
         isLoggedIn();
-        SharedPreferences preferences = this.
     }
 
     @OnClick(R.id.sign_in_button)
@@ -62,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public String isLoggedIn() {
         String authKey = loadAuthKey();
-        loginPresenter.checkAuthKey(authKey);
+        loginPresenter.checkAuthKey(null);
         return authKey;
     }
 
@@ -70,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void onLoginOk(String authKey) {
         saveAuthKey(authKey);
         startRebootActivity (authKey);
-
     }
 
     @Override
@@ -89,7 +91,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Constants.EXTRA_AUTH, authKey);
-        editor.commit();
+        editor.apply();
+        dataManager.saveAuthKey(authKey);
     }
 
     private void startRebootActivity (String authKey){
@@ -101,6 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private String loadAuthKey(){
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        System.out.println("TEST"+dataManager.getAuthKey());
         return sharedPref.getString(Constants.EXTRA_AUTH,null);
     }
 }
