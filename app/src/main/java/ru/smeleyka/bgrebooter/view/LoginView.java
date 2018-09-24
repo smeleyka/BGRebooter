@@ -10,11 +10,13 @@ public interface LoginView {
 
     //If yes should return authKey
     //If none, should return authKey = "empty"
-    String isLoggedIn();
+    void isLoggedIn();
 
     void onLoginOk(String authKey);
 
     void showLoading();
 
     void hideLoading();
+
+    void startRebootActivity(String authKey);
 }

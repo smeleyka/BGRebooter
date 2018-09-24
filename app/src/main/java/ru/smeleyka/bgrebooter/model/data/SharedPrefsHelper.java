@@ -16,6 +16,7 @@ public class SharedPrefsHelper {
 
     private SharedPreferences mSharedPreferences;
 
+    @Inject
     public SharedPrefsHelper(SharedPreferences sharedPreferences) {
         mSharedPreferences = sharedPreferences;
     }

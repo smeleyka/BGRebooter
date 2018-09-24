@@ -3,6 +3,7 @@ package ru.smeleyka.bgrebooter.view;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Provides;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.App;
 import ru.smeleyka.bgrebooter.R;
@@ -27,22 +28,31 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public static final String TAG = "LoginActivity.class";
     private LoginPresenter loginPresenter;
 
-    @BindView(R.id.login)                   EditText loginEditText;
-    @BindView(R.id.password)                EditText passwordEditText;
-    @BindView(R.id.sign_in_button)          Button signInButton;
-    @BindView(R.id.login_activity_progress) ProgressBar loginProgress;
-
-    @Inject DataManager dataManager;
+    @BindView(R.id.login)
+    EditText loginEditText;
+    @BindView(R.id.password)
+    EditText passwordEditText;
+    @BindView(R.id.sign_in_button)
+    Button signInButton;
+    @BindView(R.id.login_activity_progress)
+    ProgressBar loginProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        init();
+
+        isLoggedIn();
+    }
+
+    private void init() {
         App.getInstance().getAppComponent().inject(this);
         ButterKnife.bind(this);
         loginPresenter = new LoginPresenter(this, AndroidSchedulers.mainThread());
-        isLoggedIn();
     }
+
 
     @OnClick(R.id.sign_in_button)
     public void onSignButton() {
@@ -57,22 +67,19 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         new AlertDialog
                 .Builder(this)
                 .setTitle(message)
-                .setPositiveButton(R.string.dialog_ok,null)
+                .setPositiveButton(R.string.dialog_ok, null)
                 //.setMessage(message)
                 .show();
     }
 
     @Override
-    public String isLoggedIn() {
-        String authKey = loadAuthKey();
-        loginPresenter.checkAuthKey(null);
-        return authKey;
+    public void isLoggedIn() {
+        loginPresenter.checkAuthKey();
     }
 
     @Override
     public void onLoginOk(String authKey) {
-        saveAuthKey(authKey);
-        startRebootActivity (authKey);
+        startRebootActivity(authKey);
     }
 
     @Override
@@ -87,24 +94,25 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     }
 
-    private void saveAuthKey(String authKey){
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.EXTRA_AUTH, authKey);
-        editor.apply();
-        dataManager.saveAuthKey(authKey);
-    }
+//    private void saveAuthKey(String authKey) {
+//        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putString(Constants.EXTRA_AUTH, authKey);
+//        editor.apply();
+//        dataManager.saveAuthKey(authKey);
+//    }
 
-    private void startRebootActivity (String authKey){
+    @Override
+    public void startRebootActivity(String authKey) {
         Intent intent = new Intent(this, RebootActivity.class);
         intent.putExtra(Constants.EXTRA_AUTH, authKey);
         startActivity(intent);
-        Log.d(TAG,authKey);
+        Log.d(TAG, authKey);
     }
 
-    private String loadAuthKey(){
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        System.out.println("TEST"+dataManager.getAuthKey());
-        return sharedPref.getString(Constants.EXTRA_AUTH,null);
-    }
+//    private String loadAuthKey() {
+//        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+//        System.out.println("TEST" + dataManager.getAuthKey());
+//        return sharedPref.getString(Constants.EXTRA_AUTH, null);
+//    }
 }

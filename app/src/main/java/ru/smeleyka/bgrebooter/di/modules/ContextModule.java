@@ -4,6 +4,7 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Scheduler;
 import ru.smeleyka.bgrebooter.di.ApplicationContext;
 import ru.smeleyka.bgrebooter.di.RandomUserApplicationScope;
 
@@ -20,6 +21,6 @@ public class ContextModule {
     @ApplicationContext
     @Provides
     public Context context(){ return context.getApplicationContext(); }
-}
+   }
 
 

@@ -10,6 +10,7 @@ public class DataManager {
     private DataManager dataManager;
     private SharedPrefsHelper sharedPrefsHelper;
 
+    @Inject
     public DataManager(SharedPrefsHelper sharedPrefsHelper) {
         this.sharedPrefsHelper = sharedPrefsHelper;
         dataManager = this;

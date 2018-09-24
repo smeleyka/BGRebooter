@@ -2,6 +2,7 @@ package ru.smeleyka.bgrebooter;
 
 import android.app.Application;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.di.AppComponent;
 import ru.smeleyka.bgrebooter.di.DaggerAppComponent;
 import ru.smeleyka.bgrebooter.di.modules.ContextModule;

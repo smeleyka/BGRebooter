@@ -14,28 +14,20 @@ import ru.smeleyka.bgrebooter.model.data.SharedPrefsHelper;
 @Module (includes = ContextModule.class)
 public class SharedPreferencesModule {
 
-//    public Context context;
-//
-//
-//    public SharedPreferencesModule(Context context) {
-//        this.context = context;
-//    }
-
     @Provides
     public SharedPreferences getSharedPreferences(@ApplicationContext Context context) {
-        System.out.println("CREATING SHARED PREFERENCES");
         return context.getSharedPreferences("auth_key", Context.MODE_PRIVATE);
     }
 
-    @Provides
-    public SharedPrefsHelper getSharedPrefsHelper(SharedPreferences sharedPreferences) {
-        return new SharedPrefsHelper(sharedPreferences);
-    }
-
-    @Provides
-    public DataManager dataManager(SharedPrefsHelper sharedPrefsHelper) {
-        return new DataManager(sharedPrefsHelper);
-    }
+//    @Provides
+//    public SharedPrefsHelper getSharedPrefsHelper(SharedPreferences sharedPreferences) {
+//        return new SharedPrefsHelper(sharedPreferences);
+//    }
+//
+//    @Provides
+//    public DataManager dataManager(SharedPrefsHelper sharedPrefsHelper) {
+//        return new DataManager(sharedPrefsHelper);
+//    }
 
 
 }
