@@ -2,12 +2,17 @@ package ru.smeleyka.bgrebooter.presenter;
 
 import android.util.Log;
 
-import com.google.gson.GsonBuilder;
+import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import ru.smeleyka.bgrebooter.App;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
+import ru.smeleyka.bgrebooter.model.data.DataManager;
+import ru.smeleyka.bgrebooter.model.data.GsonHelper;
+import ru.smeleyka.bgrebooter.model.entity.HostgroupGetRequest;
+import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 import ru.smeleyka.bgrebooter.model.entity.ScriptExecuteRequest;
-import ru.smeleyka.bgrebooter.model.entity.ScriptResponse;
+import ru.smeleyka.bgrebooter.model.entity.ScriptExecuteResponse;
 import ru.smeleyka.bgrebooter.view.RebootView;
 
 /**
@@ -21,13 +26,21 @@ public class RebootPresenter {
     private String auth;
     private Scheduler mainThread;
     private RebootView rebootView;
-    private ZabbixRequest zabbixRequest;
 
-    public RebootPresenter(RebootView rebootView, Scheduler mainThread,String auth){
+    @Inject
+    protected ZabbixRequest zabbixRequest;
+
+    @Inject
+    protected DataManager dataManager;
+
+    @Inject
+    protected GsonHelper gsonHelper;
+
+    public RebootPresenter(RebootView rebootView, Scheduler mainThread){
+        App.getInstance().getAppComponent().inject(this);
         this.rebootView=rebootView;
         this.mainThread = mainThread;
-        this.auth = auth;
-        this.zabbixRequest = new ZabbixRequest();
+        this.auth = dataManager.getAuthKey();
     }
 
     public void rebootSwitch(){
@@ -41,20 +54,20 @@ public class RebootPresenter {
     public void ping(){
         rebootView.showLoading();
         Log.d(TAG,auth);
-        String scriptRequest = new GsonBuilder().create().toJson(new ScriptExecuteRequest(auth,1,10271));
+        String scriptRequest = gsonHelper.toJson(new ScriptExecuteRequest(auth,1,10271));
         Log.d(TAG,scriptRequest);
         zabbixRequest.senRequestToZabbixServer(scriptRequest)
                 .observeOn(mainThread)
                 .subscribe(
                         s -> {Log.d(TAG,  s);
-                            ScriptResponse scriptResponse = new GsonBuilder().create().fromJson(s,ScriptResponse.class);
-                            if(scriptResponse.getResult()!=null){
-                                rebootView.showResult(scriptResponse.getResult().getValue());
+                            ScriptExecuteResponse scriptExecuteResponse = gsonHelper.fromJson(s,ScriptExecuteResponse.class);
+                            if(scriptExecuteResponse.getResult()!=null){
+                                rebootView.showResult(scriptExecuteResponse.getResult().getValue());
                                 rebootView.hideLoading();
 
                             }
                             else {
-                                rebootView.showError(scriptResponse.getError().getData());
+                                rebootView.showError(scriptExecuteResponse.getError().getData());
                                 rebootView.hideLoading();
 
                             }},
@@ -64,5 +77,40 @@ public class RebootPresenter {
                         }
                 );
     }
+
+    public void getHostsGroup(){
+        rebootView.showLoading();
+        Log.d(TAG,auth);
+        String scriptRequest = gsonHelper.toJson(new HostgroupGetRequest(auth));
+        Log.d(TAG,scriptRequest);
+        zabbixRequest.senRequestToZabbixServer(scriptRequest)
+                .observeOn(mainThread)
+                .subscribe(
+                        s -> {Log.d(TAG,  s);
+                            HostgroupGetResponse hostgroupGetResponse = gsonHelper.fromJson(s,HostgroupGetResponse.class);
+                            if(hostgroupGetResponse.getResult()!=null){
+                                rebootView.showResult(""+hostgroupGetResponse.getResult().getGroupid());
+                                rebootView.hideLoading();
+
+                            }
+                            else {
+                                rebootView.showError(hostgroupGetResponse.getError().getData());
+                                rebootView.hideLoading();
+
+                            }},
+                        throwable -> {Log.d(TAG,throwable.getMessage());
+                            rebootView.showError(throwable.getMessage());
+                            rebootView.hideLoading();
+                        }
+                );
+    }
+
+    public void cleanAuth(){
+        rebootView.showResult("TEST");
+        dataManager.deleteAuthKey();
+    }
+
+
+
 
 }

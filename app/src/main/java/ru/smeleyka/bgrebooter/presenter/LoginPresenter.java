@@ -2,8 +2,6 @@ package ru.smeleyka.bgrebooter.presenter;
 
 import android.util.Log;
 
-import com.google.gson.GsonBuilder;
-
 
 import javax.inject.Inject;
 
@@ -11,9 +9,11 @@ import io.reactivex.Scheduler;
 import ru.smeleyka.bgrebooter.App;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
 import ru.smeleyka.bgrebooter.model.data.DataManager;
-import ru.smeleyka.bgrebooter.model.entity.AuthKeyCheckRequest;
-import ru.smeleyka.bgrebooter.model.entity.LoginRequest;
-import ru.smeleyka.bgrebooter.model.entity.LoginResponse;
+import ru.smeleyka.bgrebooter.model.data.GsonHelper;
+import ru.smeleyka.bgrebooter.model.entity.UserGetRequest;
+import ru.smeleyka.bgrebooter.model.entity.UserGetResponse;
+import ru.smeleyka.bgrebooter.model.entity.UserLoginRequest;
+import ru.smeleyka.bgrebooter.model.entity.UserLoginResponse;
 import ru.smeleyka.bgrebooter.view.LoginView;
 
 /**
@@ -22,79 +22,84 @@ import ru.smeleyka.bgrebooter.view.LoginView;
 
 public class LoginPresenter {
     final static String TAG = "LoginPresenter.class";
-    private ZabbixRequest zabbixRequest;
 
-    private Scheduler mainThread;
     private LoginView loginView;
+    private Scheduler mainThread;
 
     @Inject
     protected DataManager dataManager;
-
     @Inject
-    public LoginPresenter(LoginView loginView, Scheduler mainThread){
-        this.loginView=loginView;
+    protected GsonHelper gsonHelper;
+    @Inject
+    protected ZabbixRequest zabbixRequest;
+
+    public LoginPresenter(LoginView loginView, Scheduler mainThread) {
+        this.loginView = loginView;
         this.mainThread = mainThread;
-        this.zabbixRequest=new ZabbixRequest();
         App.getInstance().getAppComponent().inject(this);
+        checkAuthKey();
     }
 
-    public void login(String login, String password){
+    public void login(String login, String password) {
         loginView.showLoading();
-        String loginRequest = new GsonBuilder().serializeNulls().create().toJson(new LoginRequest(login,password));
-        Log.d(TAG,loginRequest);
+        String loginRequest = gsonHelper.toJson(new UserLoginRequest(login, password));
+        Log.d(TAG, loginRequest);
         zabbixRequest
                 .senRequestToZabbixServer(loginRequest)
                 .observeOn(mainThread)
                 .subscribe(
                         s -> {
-                            Log.d(TAG,  s);
-                            LoginResponse loginResponse = new GsonBuilder().create().fromJson(s,LoginResponse.class);
-                            if(loginResponse.getResult()!=null){
-//                                loginView.onLoginOk(loginResponse.getResult());
-                                dataManager.saveAuthKey(loginResponse.getResult());
+                            Log.d(TAG, s);
+                            UserLoginResponse userLoginResponse = gsonHelper.fromJson(s, UserLoginResponse.class);
+                            if (userLoginResponse.getResult() != null) {
+                                dataManager.saveAuthKey(userLoginResponse.getResult());
+                                dataManager.saveLogin(login);
+                                loginView.hideLoading();
+                                loginView.startRebootActivity();
+                            } else {
+                                loginView.showError(userLoginResponse.getError().getData());
                                 loginView.hideLoading();
 
                             }
-                            else {
-                                loginView.showError(loginResponse.getError().getData());
-                                loginView.hideLoading();
-
-                            }},
+                        },
                         throwable -> {
-                            Log.d(TAG,throwable.getMessage());
+                            Log.d(TAG, throwable.getMessage());
                             loginView.showError(throwable.getMessage());
                             loginView.hideLoading();
                         }
                 );
     }
-    public void checkAuthKey(){
+
+    public void checkAuthKey() {
+        loginView.setLogin(dataManager.getLogin());
         loginView.showLoading();
-        String authCheckRequest = new GsonBuilder().serializeNulls().create().toJson(new AuthKeyCheckRequest(dataManager.getAuthKey()));
-        Log.d(TAG,authCheckRequest);
-        zabbixRequest
-                .senRequestToZabbixServer(authCheckRequest)
-                .observeOn(mainThread)
-                .subscribe(
-                        s -> {
-                            Log.d(TAG,  s);
-                            LoginResponse loginResponse = new GsonBuilder().create().fromJson(s,LoginResponse.class);
-                            if(loginResponse.getResult()!=null){
-                                loginView.onLoginOk(dataManager.getAuthKey());
-                                loginView.hideLoading();
+        if (dataManager.getAuthKey() != null) {
+            String authCheckRequest = gsonHelper.toJson(new UserGetRequest(dataManager.getAuthKey()));
+            Log.d(TAG, authCheckRequest);
+            zabbixRequest
+                    .senRequestToZabbixServer(authCheckRequest)
+                    .observeOn(mainThread)
+                    .subscribe(
+                            s -> {
+                                Log.d(TAG, s);
+                                UserGetResponse userGetResponse = gsonHelper.fromJson(s, UserGetResponse.class);
+                                if (userGetResponse.getResult() != null) {
+                                    loginView.startRebootActivity();
+                                    loginView.hideLoading();
 
+                                } else {
+                                    loginView.showError(userGetResponse.getError().getData());
+                                    loginView.hideLoading();
+
+                                }
+                            },
+                            throwable -> {
+                                Log.d(TAG, throwable.getMessage());
+                                loginView.showError(throwable.getMessage());
+                                loginView.hideLoading();
                             }
-                            else {
-                                loginView.showError(loginResponse.getError().getData());
-                                loginView.hideLoading();
-
-                            }},
-                        throwable -> {
-                            Log.d(TAG,throwable.getMessage());
-                            loginView.showError(throwable.getMessage());
-                            loginView.hideLoading();
-                        }
-                );
-
-
+                    );
+        }
+        loginView.hideLoading();
     }
 }

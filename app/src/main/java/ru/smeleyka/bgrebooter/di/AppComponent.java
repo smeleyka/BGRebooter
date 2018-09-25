@@ -11,6 +11,7 @@ import ru.smeleyka.bgrebooter.di.modules.ContextModule;
 import ru.smeleyka.bgrebooter.di.modules.LoginViewModule;
 import ru.smeleyka.bgrebooter.di.modules.SharedPreferencesModule;
 import ru.smeleyka.bgrebooter.presenter.LoginPresenter;
+import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 import ru.smeleyka.bgrebooter.view.LoginActivity;
 
 @Singleton
@@ -19,4 +20,5 @@ import ru.smeleyka.bgrebooter.view.LoginActivity;
 public interface AppComponent {
     void inject(LoginActivity loginActivityctivity);
     void inject(LoginPresenter loginPresenter);
+    void inject(RebootPresenter rebootPresenter);
     }

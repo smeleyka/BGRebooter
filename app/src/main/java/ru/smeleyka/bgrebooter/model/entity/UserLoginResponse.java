@@ -4,7 +4,7 @@ package ru.smeleyka.bgrebooter.model.entity;
  * Created by smeleyka on 15.03.18.
  */
 
-public class LoginResponse extends ZabbixApiObject {
+public class UserLoginResponse extends ZabbixApiObject {
 
     String result;
 
@@ -15,7 +15,5 @@ public class LoginResponse extends ZabbixApiObject {
     public void setResult(String result) {
         this.result = result;
     }
-
-
 
 }

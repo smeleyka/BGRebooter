@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 public class SharedPrefsHelper {
 
     public static String PREF_AUTH_KEY = "auth-key";
+    public static String PREF_LOGIN = "login";
 
     private SharedPreferences mSharedPreferences;
 

@@ -4,7 +4,7 @@ package ru.smeleyka.bgrebooter.model.entity;
  * Created by smeleyka on 16.03.18.
  */
 
-public class ScriptResponse extends ZabbixApiObject {
+public class ScriptExecuteResponse extends ZabbixApiObject {
 
     private Result result;
 

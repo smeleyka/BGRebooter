@@ -4,12 +4,13 @@ package ru.smeleyka.bgrebooter.model.entity;
  * Created by smeleyka on 14.03.18.
  */
 
-public class LoginRequest extends ZabbixApiRequest {
+public class UserLoginRequest extends ZabbixApiRequest {
     private Params params;
-    private String auth;
 
-    public LoginRequest(String login, String password) {
-        this.params = new Params(login,password);
+    public UserLoginRequest(String login, String password) {
+        this.params = new Params();
+        params.setUser(login);
+        params.setPassword(password);
         setMethod("user.login");
     }
 
@@ -21,22 +22,9 @@ public class LoginRequest extends ZabbixApiRequest {
         this.params = params;
     }
 
-    public String getAuth() {
-        return auth;
-    }
-
-    public void setAuth(String auth) {
-        this.auth = auth;
-    }
-
-    class Params{
+    private class Params{
         String user;
         String password;
-
-        Params(String user,String password){
-            this.user=user;
-            this.password=password;
-        }
 
         public String getUser() {
             return user;

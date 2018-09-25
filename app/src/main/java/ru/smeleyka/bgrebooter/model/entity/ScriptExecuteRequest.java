@@ -5,13 +5,12 @@ package ru.smeleyka.bgrebooter.model.entity;
  */
 
 public class ScriptExecuteRequest extends ZabbixApiRequest {
-    private String auth;
     private Params params;
 
     public ScriptExecuteRequest(String auth, int scriptid, int hostid) {
-        this.auth = auth;
         this.params = new Params(scriptid,hostid);
         setMethod("script.execute");
+        setAuth(auth);
     }
 
     class Params{
@@ -26,15 +25,12 @@ public class ScriptExecuteRequest extends ZabbixApiRequest {
         public int getScriptid() {
             return scriptid;
         }
-
         public void setScriptid(int scriptid) {
             this.scriptid = scriptid;
         }
-
         public int getHostid() {
             return hostid;
         }
-
         public void setHostid(int hostid) {
             this.hostid = hostid;
         }
