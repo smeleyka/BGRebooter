@@ -1,10 +1,8 @@
 package ru.smeleyka.bgrebooter.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,7 +15,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
+import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
+import ru.smeleyka.bgrebooter.view.hostsView.HostgroupActivity;
+import ru.smeleyka.bgrebooter.view.hostsView.HostgroupFragment;
 
 /**
  * Created by smeleyka on 14.03.18.
@@ -45,6 +46,7 @@ public class RebootActivity extends AppCompatActivity implements RebootView {
         setContentView(R.layout.activity_reboot);
         ButterKnife.bind(this);
         rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
+
     }
 
     @OnClick(R.id.reboot_button)
@@ -92,7 +94,12 @@ public class RebootActivity extends AppCompatActivity implements RebootView {
 
     @OnClick(R.id.test_button)
     public void onTestButton(){
-        rebootPresenter.getHostsGroup();
+       startMainActivity();
+    }
+
+    private void startMainActivity(){
+        //Intent intent = new Intent(this,HostgroupActivity.class);
+        //startActivity(intent);
     }
 
 
