@@ -2,6 +2,7 @@ package ru.smeleyka.bgrebooter.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -10,14 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView{
+public class MainActivity extends AppCompatActivity implements MainActivityView {
     RebootPresenter rebootPresenter;
 
     @BindView(R.id.toolbar)
@@ -75,4 +78,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     public void hideLoading() {
 
     }
+
+    @OnClick(R.id.show_hosts_group)
+    void OnItemOneClick(){
+        Toast toast = Toast.makeText(getApplicationContext(),"Show Hosts",Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+
+   class NavigationViewOnclick implements NavigationView.OnClickListener{
+
+       @Override
+       public void onClick(View view) {
+
+       }
+   }
+
 }
