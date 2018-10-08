@@ -55,7 +55,7 @@ public class LoginPresenter {
                                 dataManager.saveAuthKey(userLoginResponse.getResult());
                                 dataManager.saveLogin(login);
                                 loginView.hideLoading();
-                                loginView.startRebootActivity();
+                                loginView.startMainActivity();
                             } else {
                                 loginView.showError(userLoginResponse.getError().getData());
                                 loginView.hideLoading();
@@ -84,7 +84,7 @@ public class LoginPresenter {
                                 Log.d(TAG, s);
                                 UserGetResponse userGetResponse = gsonHelper.fromJson(s, UserGetResponse.class);
                                 if (userGetResponse.getResult() != null) {
-                                    loginView.startRebootActivity();
+                                    loginView.startMainActivity();
                                     loginView.hideLoading();
 
                                 } else {

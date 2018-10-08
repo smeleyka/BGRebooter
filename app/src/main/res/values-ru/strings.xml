@@ -6,4 +6,7 @@
     <string name="password">Пароль</string>
     <string name="reboot">Перезагрузка</string>
     <string name="dialog_ok">OK</string>
+    <string name="hosts_groupe">Hosts groupe</string>
+    <string name="triggers">Triggers</string>
+    <string name="logout">Logout</string>
 </resources>

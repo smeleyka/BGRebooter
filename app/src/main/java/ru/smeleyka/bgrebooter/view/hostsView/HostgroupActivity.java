@@ -31,8 +31,8 @@ public class HostgroupActivity extends AppCompatActivity implements HostgroupVie
     List<HostgroupGetResponse.Hostgroup> hostgroup;
 
 
-    @BindView(R.id.main_activity_recycler)
-    RecyclerView recyclerView;
+//    @BindView(R.id.main_activity_layout)
+//    RecyclerView recyclerView;
 
     @Inject
     protected DataManager dataManager;

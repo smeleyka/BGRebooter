@@ -1,8 +1,11 @@
 package ru.smeleyka.bgrebooter.view;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -46,6 +49,14 @@ public class RebootActivity extends AppCompatActivity implements RebootView {
         setContentView(R.layout.activity_reboot);
         ButterKnife.bind(this);
         rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
+        //startFragment();
+
+    }
+
+    void startFragment(){
+        HostgroupFragment fragment = new HostgroupFragment();
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.main_layout,fragment,"TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
     }
 
@@ -94,7 +105,8 @@ public class RebootActivity extends AppCompatActivity implements RebootView {
 
     @OnClick(R.id.test_button)
     public void onTestButton(){
-       startMainActivity();
+       //startMainActivity();
+        startFragment();
     }
 
     private void startMainActivity(){

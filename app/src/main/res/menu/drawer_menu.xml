@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group >
+    <item
+        android:id="@+id/show_hosts_group"
+        android:icon="@drawable/ic_hosts_groupe"
+        android:title="@string/hosts_groupe" />
+    <item
+        android:id="@+id/show_triggers"
+        android:icon="@drawable/ic_triggers"
+        android:title="@string/triggers" />
+    <item
+        android:id="@+id/show_test"
+        android:icon="@drawable/ic_test"
+        android:title="@string/test" />
+    </group>
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout" />
+</menu>
