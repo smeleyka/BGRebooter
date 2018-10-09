@@ -1,4 +1,4 @@
-package ru.smeleyka.bgrebooter.view.hostsView;
+package ru.smeleyka.bgrebooter.view.fragments;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

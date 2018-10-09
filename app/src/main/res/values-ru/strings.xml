@@ -9,4 +9,7 @@
     <string name="hosts_groupe">Hosts groupe</string>
     <string name="triggers">Triggers</string>
     <string name="logout">Logout</string>
+    <string name="clean_auth">УДАЛИТЬ AUTH KEY</string>
+    <string name="test_button">TEST BUTTON</string>
+    <string name="test">Test</string>
 </resources>

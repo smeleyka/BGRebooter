@@ -1,16 +1,14 @@
-package ru.smeleyka.bgrebooter.view.hostsView;
+package ru.smeleyka.bgrebooter.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,8 +19,6 @@ import ru.smeleyka.bgrebooter.model.data.DataManager;
 import ru.smeleyka.bgrebooter.model.data.GsonHelper;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetRequest;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
-import ru.smeleyka.bgrebooter.model.entity.UserLoginRequest;
-import ru.smeleyka.bgrebooter.model.entity.UserLoginResponse;
 
 public class HostgroupActivity extends AppCompatActivity implements HostgroupView {
 

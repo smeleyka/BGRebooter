@@ -1,11 +1,8 @@
 package ru.smeleyka.bgrebooter.view;
 
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,10 +15,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
-import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
-import ru.smeleyka.bgrebooter.view.hostsView.HostgroupActivity;
-import ru.smeleyka.bgrebooter.view.hostsView.HostgroupFragment;
+import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
 
 /**
  * Created by smeleyka on 14.03.18.
@@ -49,7 +44,7 @@ public class RebootActivity extends AppCompatActivity implements RebootView {
         setContentView(R.layout.activity_reboot);
         ButterKnife.bind(this);
         rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
-        //startFragment();
+        startFragment();
 
     }
 

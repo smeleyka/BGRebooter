@@ -9,7 +9,7 @@ import ru.smeleyka.bgrebooter.presenter.HostgroupActivityPresenter;
 import ru.smeleyka.bgrebooter.presenter.LoginPresenter;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 import ru.smeleyka.bgrebooter.view.LoginActivity;
-import ru.smeleyka.bgrebooter.view.hostsView.HostgroupActivity;
+import ru.smeleyka.bgrebooter.view.fragments.HostgroupActivity;
 
 @Singleton
 @Component (modules =  {SharedPreferencesModule.class})
