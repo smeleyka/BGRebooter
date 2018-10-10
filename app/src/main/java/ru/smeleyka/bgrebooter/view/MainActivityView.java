@@ -10,4 +10,6 @@ public interface MainActivityView {
 
     void hideLoading();
 
+    void addMenuItem(String name);
+
 }

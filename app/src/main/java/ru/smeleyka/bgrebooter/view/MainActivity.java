@@ -11,7 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -26,18 +26,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     RebootPresenter rebootPresenter;
 
     @BindView(R.id.toolbar)
-     Toolbar toolbar;
+    Toolbar toolbar;
 
     @BindView(R.id.drawer_layout)
-     DrawerLayout drawerLayout;
+    DrawerLayout drawerLayout;
 
     @BindView(R.id.nav_view)
-     NavigationView navigationView;
+    NavigationView navigationView;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        init();
+        animatedDrawerAppBarButton();
+        startFragment();
+
+        //createDrawerMenu();
+        //drawerLayout.closeDrawers();
+        //rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
+        //startFragment();
+    }
+
+    private void init() {
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
@@ -46,17 +58,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         navigationView.setOnClickListener(new NavigationViewOnclick());
         navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener());
+    }
 
+    private void animatedDrawerAppBarButton() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        startFragment();
+    }
 
-        //drawerLayout.closeDrawers();
+    private void createDrawerMenu(String name) {
+        //navigationView.getMenu().clear();
+        Menu menu = navigationView.getMenu();
+        menu.addSubMenu(name);
+    }
 
-        //rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
-        //startFragment();
+    @Override
+    public void addMenuItem(String name) {
+        createDrawerMenu(name);
     }
 
     void startFragment() {
@@ -65,8 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         fm.beginTransaction().add(R.id.fragment_container, fragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
-
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -122,35 +140,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            switch (item.getItemId()) {
-                case R.id.show_hosts_group: {
-                    item.setChecked(true);
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString()+" "+item.getOrder(), Toast.LENGTH_SHORT);
+            switch (item.getNumericShortcut()) {
+                case 0: {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
 
-                case R.id.show_test: {
-                    item.setChecked(true);
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString()+" "+item.getOrder(), Toast.LENGTH_SHORT);
+                case 1: {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                case R.id.show_triggers: {
-                    item.setChecked(true);
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString()+" "+item.getOrder(), Toast.LENGTH_SHORT);
+                case 2: {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                case R.id.logout: {
-                    item.setChecked(true);
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString()+" "+item.getOrder(), Toast.LENGTH_SHORT);
+                case 3: {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 default: {
                     item.setChecked(true);
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString()+" "+item.getOrder(), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
 //            Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
 //            toast.show();
-            drawerLayout.closeDrawer(GravityCompat.START);
+            //drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         }
     }
