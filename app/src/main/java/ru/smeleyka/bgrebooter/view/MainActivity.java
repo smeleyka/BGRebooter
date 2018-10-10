@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +19,15 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
+import ru.smeleyka.bgrebooter.presenter.MainActivityPresenter;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
-    RebootPresenter rebootPresenter;
+    String TAG = "MainActivity.class";
+    MainActivityPresenter mainActivityPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         //createDrawerMenu();
         //drawerLayout.closeDrawers();
-        //rebootPresenter = new RebootPresenter(this, AndroidSchedulers.mainThread());
+        this.mainActivityPresenter = new MainActivityPresenter(this, AndroidSchedulers.mainThread());
         //startFragment();
     }
 
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private void createDrawerMenu(String name) {
         //navigationView.getMenu().clear();
         Menu menu = navigationView.getMenu();
-        menu.addSubMenu(name);
+        menu.add(name);
     }
 
     @Override
@@ -141,28 +145,39 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             switch (item.getNumericShortcut()) {
-                case 0: {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
+                case '0': {
+                    mainActivityPresenter.getHostsGroup();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
                     toast.show();
+                    break;
                 }
 
-                case 1: {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
+                case '1': {
+                    mainActivityPresenter.testFunc();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
                     toast.show();
+                    break;
+
                 }
-                case 2: {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
+                case '2': {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
                     toast.show();
+                    break;
+
                 }
-                case 3: {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
+                case '3': {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
                     toast.show();
+                    break;
+
                 }
                 default: {
-                    item.setChecked(true);
+                    Log.d(TAG,"Default Item Pressed");
+//                    item.setChecked(true);
+//                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+//                    toast.show();
+                    break;
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getOrder(), Toast.LENGTH_SHORT);
-                    toast.show();
                 }
             }
 

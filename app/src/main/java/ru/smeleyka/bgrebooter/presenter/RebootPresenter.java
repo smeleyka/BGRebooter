@@ -89,7 +89,7 @@ public class RebootPresenter {
                         s -> {Log.d(TAG,  s);
                             HostgroupGetResponse hostgroupGetResponse = gsonHelper.fromJson(s,HostgroupGetResponse.class);
                             if(hostgroupGetResponse.getResult()!=null){
-                                rebootView.showResult(""+hostgroupGetResponse.getResult().getGroupid());
+                                //rebootView.showResult(""+hostgroupGetResponse.getResult().getGroupid());
                                 rebootView.hideLoading();
 
                             }

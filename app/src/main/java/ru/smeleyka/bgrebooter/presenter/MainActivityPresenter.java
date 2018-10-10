@@ -5,6 +5,7 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 import ru.smeleyka.bgrebooter.App;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
 import ru.smeleyka.bgrebooter.model.data.DataManager;
@@ -17,7 +18,7 @@ import ru.smeleyka.bgrebooter.view.MainActivityView;
 import ru.smeleyka.bgrebooter.view.MainActivityView;
 
 public class MainActivityPresenter {
-    final static String TAG = "MainActivityPresenter.class";
+    final static String TAG = "MainActivityPres.class";
 
     private String auth;
     private Scheduler mainThread;
@@ -37,6 +38,7 @@ public class MainActivityPresenter {
         this.mainActivityView = mainActivityView;
         this.mainThread = mainThread;
         this.auth = dataManager.getAuthKey();
+        Log.d(TAG,"constructor "+auth);
     }
 
     public void rebootSwitch() {
@@ -83,7 +85,7 @@ public class MainActivityPresenter {
                 .observeOn(mainThread)
                 .subscribe(
                         s -> {
-                            addMenuItem(s.getName());
+                            addMenuItem(""+s.getGroupid());
                         },
                         throwable -> {
                             Log.d(TAG, throwable.getMessage());
@@ -100,6 +102,10 @@ public class MainActivityPresenter {
 
     public void addMenuItem(String name){
         mainActivityView.addMenuItem(name);
+    }
+
+    public void testFunc(){
+        Log.d(TAG,"TEST");
     }
 
 

@@ -62,8 +62,9 @@ public class DataManager {
                         .flatMap(s -> {
                             Log.d(TAG, s);
                             HostgroupGetResponse hostgroupGetResponse = gsonHelper.fromJson(s, HostgroupGetResponse.class);
-                            List<HostgroupGetResponse.Hostgroup> hostGroupeList = hostgroupGetResponse.getHostgroupList();
-                            return Observable.fromIterable(hostGroupeList);
+                            HostgroupGetResponse.Hostgroup[] hostGroupeList = hostgroupGetResponse.getResult();
+                            Log.d(TAG,""+hostGroupeList[0].getGroupid());
+                            return Observable.fromArray(hostGroupeList);
                         });
         return observableGroupe;
 
