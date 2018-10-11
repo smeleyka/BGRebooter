@@ -85,7 +85,9 @@ public class MainActivityPresenter {
                 .observeOn(mainThread)
                 .subscribe(
                         s -> {
-                            addMenuItem(""+s.getGroupid());
+                            addMenuItem(s.getName());
+                            addMenuItem(s);
+                            mainActivityView.hideLoading();
                         },
                         throwable -> {
                             Log.d(TAG, throwable.getMessage());
@@ -102,6 +104,9 @@ public class MainActivityPresenter {
 
     public void addMenuItem(String name){
         mainActivityView.addMenuItem(name);
+    }
+    public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup){
+        mainActivityView.addMenuItem(hostgroup);
     }
 
     public void testFunc(){

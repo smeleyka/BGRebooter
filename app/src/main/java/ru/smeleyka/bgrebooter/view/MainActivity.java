@@ -17,10 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
+import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 import ru.smeleyka.bgrebooter.presenter.MainActivityPresenter;
 import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
@@ -28,6 +31,8 @@ import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
 public class MainActivity extends AppCompatActivity implements MainActivityView {
     String TAG = "MainActivity.class";
     MainActivityPresenter mainActivityPresenter;
+    HostgroupFragment hostgroupFragment;
+    ArrayList<HostgroupGetResponse.Hostgroup> hostgroupArrayList = new ArrayList<>();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -50,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         //createDrawerMenu();
         //drawerLayout.closeDrawers();
         this.mainActivityPresenter = new MainActivityPresenter(this, AndroidSchedulers.mainThread());
-        //startFragment();
     }
 
     private void init() {
@@ -60,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        navigationView.setOnClickListener(new NavigationViewOnclick());
         navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener());
     }
 
@@ -72,9 +75,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     private void createDrawerMenu(String name) {
-        //navigationView.getMenu().clear();
         Menu menu = navigationView.getMenu();
-        menu.add(name);
+        menu.add(name).setIcon(R.drawable.ic_group);
     }
 
     @Override
@@ -82,22 +84,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         createDrawerMenu(name);
     }
 
-    void startFragment() {
-        HostgroupFragment fragment = new HostgroupFragment();
-        android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().add(R.id.fragment_container, fragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+    public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup) {
+        hostgroupArrayList.add(hostgroup);
+        Log.d(TAG,""+hostgroupArrayList.size());
+        //hostgroupFragment.addItemToRecyclerView(hostgroup);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    void startFragment() {
+        hostgroupFragment = new HostgroupFragment();
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
     @Override
@@ -130,20 +126,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
-    class NavigationViewOnclick implements NavigationView.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Button pressed " + view.getId(), Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
     class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+            navigationView.setCheckedItem(item.getItemId());
             switch (item.getNumericShortcut()) {
                 case '0': {
                     mainActivityPresenter.getHostsGroup();
@@ -153,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 }
 
                 case '1': {
-                    mainActivityPresenter.testFunc();
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+                   //hostgroupFragment.addItemToRecyclerView(hostgroupArrayList.get(0));
+                    hostgroupFragment.inflateView();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + hostgroupArrayList.get(0).getName() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
@@ -172,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
                 }
                 default: {
-                    Log.d(TAG,"Default Item Pressed");
+                    Log.d(TAG, "Default Item Pressed");
 //                    item.setChecked(true);
 //                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
 //                    toast.show();

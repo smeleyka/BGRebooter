@@ -8,6 +8,7 @@ public class HostgroupGetRequest extends ZabbixApiRequest {
     public HostgroupGetRequest(String auth) {
         this.params = new Params();
         params.setRealHosts(1);
+        params.setOutput("extend");
         setAuth(auth);
         setMethod("hostgroup.get");
     }

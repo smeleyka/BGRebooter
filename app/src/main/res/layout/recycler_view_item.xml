@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/groupe_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/item_round_background"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        android:text="T" />
+
+    <TextView
+        android:id="@+id/groupe_name"
+        android:layout_width="192dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        android:text="GroupeName"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/groupe_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="id N" />
+
+        <TextView
+            android:id="@+id/groupe_host_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="hosts N" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
