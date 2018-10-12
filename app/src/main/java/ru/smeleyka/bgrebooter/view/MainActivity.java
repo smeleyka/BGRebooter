@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         init();
         animatedDrawerAppBarButton();
-        startFragment();
+        //startFragment();
 
         //createDrawerMenu();
         //drawerLayout.closeDrawers();
@@ -86,12 +86,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup) {
         hostgroupArrayList.add(hostgroup);
-        Log.d(TAG,""+hostgroupArrayList.size());
+        Log.d(TAG, "" + hostgroupArrayList.size());
         //hostgroupFragment.addItemToRecyclerView(hostgroup);
     }
 
     void startFragment() {
         hostgroupFragment = new HostgroupFragment();
+        hostgroupFragment.setHostgroupList(hostgroupArrayList);
         android.app.FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
@@ -134,27 +135,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             switch (item.getNumericShortcut()) {
                 case '0': {
                     mainActivityPresenter.getHostsGroup();
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
 
                 case '1': {
-                   //hostgroupFragment.addItemToRecyclerView(hostgroupArrayList.get(0));
-                    hostgroupFragment.inflateView();
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + hostgroupArrayList.get(0).getName() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+
+                    startFragment();
+                    //hostgroupFragment.inflateView();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
                 }
                 case '2': {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+                    hostgroupFragment.inflateView();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
                 }
                 case '3': {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 default: {
                     Log.d(TAG, "Default Item Pressed");
 //                    item.setChecked(true);
-//                    Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString() + " " + item.getNumericShortcut(), Toast.LENGTH_SHORT);
+//                   Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
 //                    toast.show();
                     break;
 
@@ -172,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
 //            Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
 //            toast.show();
-            //drawerLayout.closeDrawer(GravityCompat.START);
+            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         }
     }

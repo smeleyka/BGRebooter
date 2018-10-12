@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 
 public class HostgroupFragment extends Fragment {
 
+    private String TAG = "HostgroupFragment.class";
+    private ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList;
+
     Context mContext;
 
     MyRecyclerViewAdapter myRecyclerViewAdapter;
     RecyclerView.LayoutManager mLinearLayoutManager;
-
     RecyclerView recyclerView;
 
     @Override
@@ -41,15 +44,15 @@ public class HostgroupFragment extends Fragment {
         mContext = inflater.getContext();
         View view = inflater.inflate(R.layout.fragment_layout, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
-        //initRecyclerView();
+        initRecyclerView();
 
         return view;
     }
 
     private void initRecyclerView() {
 
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        myRecyclerViewAdapter = new MyRecyclerViewAdapter(null);
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        myRecyclerViewAdapter = new MyRecyclerViewAdapter(hostgroupList);
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(myRecyclerViewAdapter);
     }
@@ -64,12 +67,18 @@ public class HostgroupFragment extends Fragment {
 //        groupName.setText(hostgroup.getName());
     }
 
+    public void setHostgroupList(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
+        this.hostgroupList = hostgroupList;
+    }
+
     class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
+        private String TAG = "MyRecyclerViewAdapter.class";
 
         List<HostgroupGetResponse.Hostgroup> hostgroupList;
 
-        public MyRecyclerViewAdapter(List<HostgroupGetResponse.Hostgroup> hostgroupList) {
+        public MyRecyclerViewAdapter(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
             this.hostgroupList = hostgroupList;
+            Log.d(TAG,"hostgroupList count= "+hostgroupList.size());
         }
 
         public void setItems(Collection<HostgroupGetResponse.Hostgroup> hostgroups) {
@@ -80,6 +89,7 @@ public class HostgroupFragment extends Fragment {
         public void setItemByOne(HostgroupGetResponse.Hostgroup hostgroup) {
             hostgroupList.add(hostgroup);
             notifyDataSetChanged();
+            Log.d(TAG,"hostgroupList count= "+hostgroupList.size());
         }
 
         public void clearItems() {
@@ -87,14 +97,15 @@ public class HostgroupFragment extends Fragment {
             notifyDataSetChanged();
         }
 
-
-
-
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
+            View view = LayoutInflater.from(mContext)
                     .inflate(R.layout.recycler_view_item, parent, false);
+
+            Log.d(TAG, "Class of view: " + view.getClass().toString());
+            Log.d(TAG, "LayoutParams of view is null: " + (view.getLayoutParams() == null));
+
             return new MyViewHolder(view);
         }
 
@@ -103,17 +114,15 @@ public class HostgroupFragment extends Fragment {
             holder.bind(hostgroupList.get(position));
         }
 
-
-
         @Override
         public int getItemCount() {
             return hostgroupList.size();
         }
 
-
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+private String TAG = "MyViewHolder.class";
 
         TextView groupeNameTextView;
         TextView groupeIdTextView;
@@ -121,16 +130,18 @@ public class HostgroupFragment extends Fragment {
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            Log.d(TAG, "Class of view: " + itemView.getClass().toString());
+            Log.d(TAG, "LayoutParams of view is null: " + (itemView.getLayoutParams() == null));
             groupeNameTextView = itemView.findViewById(R.id.groupe_name);
-            //groupeIdTextView = itemView.findViewById(R.id.groupe_id);
-            //groupeHostsCountTextView = itemView.findViewById(R.id.groupe_host_count);
-
+            groupeIdTextView = itemView.findViewById(R.id.host_groupe_id);
+            groupeHostsCountTextView = itemView.findViewById(R.id.groupe_host_count);
         }
 
         public void bind(HostgroupGetResponse.Hostgroup hostgroup) {
+
             groupeNameTextView.setText(hostgroup.getName());
-            //groupeIdTextView.setText(hostgroup.getGroupid());
-            //groupeHostsCountTextView.setText(hostgroup.getHosts().length);
+            groupeIdTextView.setText(hostgroup.getGroupid());
+            groupeHostsCountTextView.setText(""+hostgroup.getHosts());
 
         }
     }
