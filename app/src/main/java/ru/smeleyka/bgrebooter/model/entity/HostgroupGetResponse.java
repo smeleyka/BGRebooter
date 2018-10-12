@@ -38,15 +38,15 @@ public class HostgroupGetResponse extends ZabbixApiObject {
     }
 
     public class Hostgroup {
-        String groupid;
+        int groupid;
         String name;
         Hosts[] hosts;
 
-        public String getGroupid() {
+        public int getGroupid() {
             return groupid;
         }
 
-        public void setGroupid(String groupid) {
+        public void setGroupid(int groupid) {
             this.groupid = groupid;
         }
 

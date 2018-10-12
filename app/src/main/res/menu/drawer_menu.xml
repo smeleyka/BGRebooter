@@ -6,19 +6,19 @@
             android:id="@+id/show_hosts_group"
             android:icon="@drawable/ic_hosts_groupe"
             android:title="@string/hosts_groupe"
-            android:numericShortcut="0"
+            android:alphabeticShortcut="show_hosts_group"
             />
         <item
             android:id="@+id/show_triggers"
             android:icon="@drawable/ic_triggers"
             android:title="@string/triggers"
-            android:numericShortcut="1"
+            android:numericShortcut="show_triggers"
             />
         <item
             android:id="@+id/show_test"
             android:icon="@drawable/ic_test"
             android:title="@string/test"
-            android:numericShortcut="2"
+            android:numericShortcut="show_test"
 
 
             />
@@ -31,7 +31,7 @@
             android:id="@+id/logout"
             android:icon="@drawable/ic_logout"
             android:title="@string/logout"
-            android:numericShortcut="3"
+            android:numericShortcut="logout"
 
             />
     </group>

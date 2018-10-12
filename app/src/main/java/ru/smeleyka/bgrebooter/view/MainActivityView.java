@@ -16,4 +16,6 @@ public interface MainActivityView {
 
     void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup);
 
+    void goBack();
+
 }

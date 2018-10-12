@@ -98,9 +98,12 @@ public class MainActivityPresenter {
     }
 
     public void cleanAuth() {
-        mainActivityView.showResult("TEST");
+        mainActivityView.showResult("Clear Auth");
+        mainActivityView.goBack();
         dataManager.deleteAuthKey();
     }
+
+
 
     public void addMenuItem(String name){
         mainActivityView.addMenuItem(name);

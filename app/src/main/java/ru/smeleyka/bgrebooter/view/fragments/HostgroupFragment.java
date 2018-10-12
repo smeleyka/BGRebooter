@@ -127,21 +127,24 @@ private String TAG = "MyViewHolder.class";
         TextView groupeNameTextView;
         TextView groupeIdTextView;
         TextView groupeHostsCountTextView;
+        TextView groupeImgTextView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             Log.d(TAG, "Class of view: " + itemView.getClass().toString());
             Log.d(TAG, "LayoutParams of view is null: " + (itemView.getLayoutParams() == null));
             groupeNameTextView = itemView.findViewById(R.id.groupe_name);
-            groupeIdTextView = itemView.findViewById(R.id.host_groupe_id);
+            groupeIdTextView = itemView.findViewById(R.id.groupe_id);
             groupeHostsCountTextView = itemView.findViewById(R.id.groupe_host_count);
+            groupeImgTextView = itemView.findViewById(R.id.groupe_image);
         }
 
         public void bind(HostgroupGetResponse.Hostgroup hostgroup) {
 
+            groupeImgTextView.setText(""+hostgroup.getName().charAt(0));
             groupeNameTextView.setText(hostgroup.getName());
-            groupeIdTextView.setText(hostgroup.getGroupid());
-            groupeHostsCountTextView.setText(""+hostgroup.getHosts());
+            groupeIdTextView.setText(""+hostgroup.getGroupid());
+            groupeHostsCountTextView.setText(""+hostgroup.getHosts().length);
 
         }
     }

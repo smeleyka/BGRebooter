@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         createDrawerMenu(name);
     }
 
+    @Override
     public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup) {
         hostgroupArrayList.add(hostgroup);
         Log.d(TAG, "" + hostgroupArrayList.size());
@@ -117,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     }
 
+
+
     //Close Drawer if opened on Back Press
     @Override
     public void onBackPressed() {
@@ -127,20 +130,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         }
     }
 
+    @Override
+    public void goBack() {
+       super.onBackPressed();
+    }
+
     class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             navigationView.setCheckedItem(item.getItemId());
-            switch (item.getNumericShortcut()) {
-                case '0': {
+            switch (item.getItemId()) {
+                case R.id.show_hosts_group: {
                     mainActivityPresenter.getHostsGroup();
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
 
-                case '1': {
+                case R.id.show_triggers: {
 
                     startFragment();
                     //hostgroupFragment.inflateView();
@@ -149,14 +157,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     break;
 
                 }
-                case '2': {
+                case R.id.show_test: {
                     hostgroupFragment.inflateView();
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
                 }
-                case '3': {
+                case R.id.logout: {
+                    mainActivityPresenter.cleanAuth();
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;

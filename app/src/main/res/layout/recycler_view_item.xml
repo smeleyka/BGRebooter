@@ -3,24 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
+    android:background="@color/gradientEnd"
     android:padding="4dp"
-    tools:showIn="@layout/fragment_layout">
+    tools:showIn="@layout/fragment_layout"
+    android:elevation="4dp">
 
     <TextView
         android:id="@+id/groupe_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/item_round_background"
         android:gravity="center"
         android:foregroundGravity="center"
+        android:layout_gravity="center"
         android:textSize="30dp"
         android:textStyle="bold"
         android:text="T" />
 
     <TextView
         android:id="@+id/groupe_name"
-        android:layout_width="192dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="4dp"
@@ -33,7 +39,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/host_groupe_id"
+            android:id="@+id/groupe_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
