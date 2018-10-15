@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 
@@ -62,7 +60,7 @@ public class HostgroupFragment extends Fragment {
     }
 
     public void inflateView(){
-        getActivity().getLayoutInflater().inflate(R.layout.recycler_view_item,((ViewGroup)getView().getParent()),true);
+        getActivity().getLayoutInflater().inflate(R.layout.recycler_view_item_two_line,((ViewGroup)getView().getParent()),true);
 //        TextView groupName = getView().findViewById(R.id.groupe_name);
 //        groupName.setText(hostgroup.getName());
     }
@@ -101,7 +99,7 @@ public class HostgroupFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext)
-                    .inflate(R.layout.recycler_view_item, parent, false);
+                    .inflate(R.layout.recycler_view_item_two_line, parent, false);
 
             Log.d(TAG, "Class of view: " + view.getClass().toString());
             Log.d(TAG, "LayoutParams of view is null: " + (view.getLayoutParams() == null));
@@ -133,18 +131,18 @@ private String TAG = "MyViewHolder.class";
             super(itemView);
             Log.d(TAG, "Class of view: " + itemView.getClass().toString());
             Log.d(TAG, "LayoutParams of view is null: " + (itemView.getLayoutParams() == null));
-            groupeNameTextView = itemView.findViewById(R.id.groupe_name);
-            groupeIdTextView = itemView.findViewById(R.id.groupe_id);
-            groupeHostsCountTextView = itemView.findViewById(R.id.groupe_host_count);
-            groupeImgTextView = itemView.findViewById(R.id.groupe_image);
+            groupeNameTextView = itemView.findViewById(R.id.recycler_item_text_first);
+            groupeIdTextView = itemView.findViewById(R.id.recycler_item_text_groupe_id);
+            groupeHostsCountTextView = itemView.findViewById(R.id.recycler_item_text_host_count);
+            groupeImgTextView = itemView.findViewById(R.id.recycler_item_image);
         }
 
         public void bind(HostgroupGetResponse.Hostgroup hostgroup) {
 
             groupeImgTextView.setText(""+hostgroup.getName().charAt(0));
-            groupeNameTextView.setText(hostgroup.getName());
-            groupeIdTextView.setText(""+hostgroup.getGroupid());
-            groupeHostsCountTextView.setText(""+hostgroup.getHosts().length);
+            groupeNameTextView.setText(""+hostgroup.getName());
+            groupeIdTextView.setText("id: "+hostgroup.getGroupid());
+            groupeHostsCountTextView.setText("hosts: "+hostgroup.getHosts().length);
 
         }
     }

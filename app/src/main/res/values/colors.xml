@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="gradientStart">#64b5f6</color>
     <color name="gradientEnd">#ffab40</color>
+    <color name="dividerLightGray">#ddd</color>
+    <color name="dividerDarkGray">#aaa</color>
+    <color name="recyclerFirstText">#e6000000</color>
+    <color name="recyclerSecondText">#63000000</color>
+
 </resources>
