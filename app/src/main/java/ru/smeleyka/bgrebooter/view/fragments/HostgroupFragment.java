@@ -74,6 +74,10 @@ public class HostgroupFragment extends Fragment {
 
         List<HostgroupGetResponse.Hostgroup> hostgroupList;
 
+        public MyRecyclerViewAdapter() {
+            this.hostgroupList = new ArrayList<>();
+        }
+
         public MyRecyclerViewAdapter(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
             this.hostgroupList = hostgroupList;
             Log.d(TAG,"hostgroupList count= "+hostgroupList.size());
