@@ -1,8 +1,10 @@
 package ru.smeleyka.bgrebooter.view.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,23 +19,34 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Observable;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
+import ru.smeleyka.bgrebooter.view.MainActivity;
+import ru.smeleyka.bgrebooter.view.MainActivityView;
 
 public class HostgroupFragment extends Fragment {
 
     private String TAG = "HostgroupFragment.class";
-    private ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList;
 
     Context mContext;
 
+    MainActivityView mainActivityView;
     MyRecyclerViewAdapter myRecyclerViewAdapter;
     RecyclerView.LayoutManager mLinearLayoutManager;
     RecyclerView recyclerView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mainActivityView = (MainActivityView) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement MainActivityView.class");
+        }
     }
 
     @Nullable
@@ -43,14 +56,14 @@ public class HostgroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_layout, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
         initRecyclerView();
-
         return view;
     }
 
     private void initRecyclerView() {
-
-        mLinearLayoutManager = new LinearLayoutManager(mContext);
-        myRecyclerViewAdapter = new MyRecyclerViewAdapter(hostgroupList);
+        if (myRecyclerViewAdapter == null && mLinearLayoutManager == null) {
+            mLinearLayoutManager = new LinearLayoutManager(mContext);
+            myRecyclerViewAdapter = new MyRecyclerViewAdapter();
+        }
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(myRecyclerViewAdapter);
     }
@@ -59,15 +72,10 @@ public class HostgroupFragment extends Fragment {
         myRecyclerViewAdapter.setItemByOne(hostgroup);
     }
 
-    public void inflateView(){
-        getActivity().getLayoutInflater().inflate(R.layout.recycler_view_item_two_line,((ViewGroup)getView().getParent()),true);
-//        TextView groupName = getView().findViewById(R.id.groupe_name);
-//        groupName.setText(hostgroup.getName());
+    public void subscribeToHostsGroup(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
+        myRecyclerViewAdapter.setItemSubscription(hostgroupObservable);
     }
 
-    public void setHostgroupList(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
-        this.hostgroupList = hostgroupList;
-    }
 
     class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private String TAG = "MyRecyclerViewAdapter.class";
@@ -80,7 +88,7 @@ public class HostgroupFragment extends Fragment {
 
         public MyRecyclerViewAdapter(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
             this.hostgroupList = hostgroupList;
-            Log.d(TAG,"hostgroupList count= "+hostgroupList.size());
+            Log.d(TAG, "hostgroupList count= " + hostgroupList.size());
         }
 
         public void setItems(Collection<HostgroupGetResponse.Hostgroup> hostgroups) {
@@ -91,7 +99,22 @@ public class HostgroupFragment extends Fragment {
         public void setItemByOne(HostgroupGetResponse.Hostgroup hostgroup) {
             hostgroupList.add(hostgroup);
             notifyDataSetChanged();
-            Log.d(TAG,"hostgroupList count= "+hostgroupList.size());
+            Log.d(TAG, "hostgroupList count= " + hostgroupList.size());
+        }
+
+        public void setItemSubscription(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
+            hostgroupObservable.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            s -> {
+                                hostgroupList.add(s);
+                                notifyDataSetChanged();
+                            },
+                            throwable -> {
+                                Log.d(TAG, throwable.getMessage());
+                                mainActivityView.showError(throwable.getMessage());
+                                mainActivityView.hideLoading();
+                            }
+                    );
         }
 
         public void clearItems() {
@@ -124,7 +147,7 @@ public class HostgroupFragment extends Fragment {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-private String TAG = "MyViewHolder.class";
+        private String TAG = "MyViewHolder.class";
 
         TextView groupeNameTextView;
         TextView groupeIdTextView;
@@ -143,10 +166,10 @@ private String TAG = "MyViewHolder.class";
 
         public void bind(HostgroupGetResponse.Hostgroup hostgroup) {
 
-            groupeImgTextView.setText(""+hostgroup.getName().charAt(0));
-            groupeNameTextView.setText(""+hostgroup.getName());
-            groupeIdTextView.setText("id: "+hostgroup.getGroupid());
-            groupeHostsCountTextView.setText("hosts: "+hostgroup.getHosts().length);
+            groupeImgTextView.setText("" + hostgroup.getName().charAt(0));
+            groupeNameTextView.setText("" + hostgroup.getName());
+            groupeIdTextView.setText("id: " + hostgroup.getGroupid());
+            groupeHostsCountTextView.setText("hosts: " + hostgroup.getHosts().length);
 
         }
     }

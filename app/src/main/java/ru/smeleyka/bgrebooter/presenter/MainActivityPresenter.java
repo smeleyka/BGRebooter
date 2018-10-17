@@ -4,6 +4,7 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 import ru.smeleyka.bgrebooter.App;
@@ -38,7 +39,12 @@ public class MainActivityPresenter {
         this.mainActivityView = mainActivityView;
         this.mainThread = mainThread;
         this.auth = dataManager.getAuthKey();
-        Log.d(TAG,"constructor "+auth);
+        Log.d(TAG, "constructor " + auth);
+    }
+
+    public void onStart(){
+        Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable = getHostGroupeObseravable();
+        mainActivityView.showHostgroupFragment(hostgroupObservable);
     }
 
     public void rebootSwitch() {
@@ -86,7 +92,6 @@ public class MainActivityPresenter {
                 .subscribe(
                         s -> {
                             addMenuItem(s.getName());
-                            addMenuItem(s);
                             mainActivityView.hideLoading();
                         },
                         throwable -> {
@@ -97,6 +102,10 @@ public class MainActivityPresenter {
                 );
     }
 
+    public Observable<HostgroupGetResponse.Hostgroup> getHostGroupeObseravable() {
+        return dataManager.getHostGroupList(auth);
+    }
+
     public void cleanAuth() {
         mainActivityView.showResult("Clear Auth");
         mainActivityView.goBack();
@@ -104,16 +113,12 @@ public class MainActivityPresenter {
     }
 
 
-
-    public void addMenuItem(String name){
+    public void addMenuItem(String name) {
         mainActivityView.addMenuItem(name);
     }
-    public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup){
-        mainActivityView.addMenuItem(hostgroup);
-    }
 
-    public void testFunc(){
-        Log.d(TAG,"TEST");
+     public void testFunc() {
+        Log.d(TAG, "TEST");
     }
 
 

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     String TAG = "MainActivity.class";
     MainActivityPresenter mainActivityPresenter;
     HostgroupFragment hostgroupFragment;
-    ArrayList<HostgroupGetResponse.Hostgroup> hostgroupArrayList = new ArrayList<>();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -43,35 +43,42 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         init();
-        animatedDrawerAppBarButton();
-        //startFragment();
 
-        //createDrawerMenu();
-        //drawerLayout.closeDrawers();
+        // showHostgroupFragment();
+
         this.mainActivityPresenter = new MainActivityPresenter(this, AndroidSchedulers.mainThread());
     }
 
     private void init() {
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
+
+        //Init ActionBar
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener());
-    }
 
-    private void animatedDrawerAppBarButton() {
+        //Animated ActionBar Drawer toggle button
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        //Drawer menu click listener
+        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener());
+
+        if (hostgroupFragment == null) {
+            hostgroupFragment = new HostgroupFragment();
+        }
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+
     }
 
     private void createDrawerMenu(String name) {
@@ -80,22 +87,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    public void addMenuItem(String name) {
-        createDrawerMenu(name);
+    protected void onStart() {
+        super.onStart();
+        mainActivityPresenter.onStart();
     }
 
     @Override
-    public void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup) {
-        hostgroupArrayList.add(hostgroup);
-        Log.d(TAG, "" + hostgroupArrayList.size());
-        //hostgroupFragment.addItemToRecyclerView(hostgroup);
-    }
-
-    void startFragment() {
-        hostgroupFragment = new HostgroupFragment();
-        hostgroupFragment.setHostgroupList(hostgroupArrayList);
+    public void showHostgroupFragment(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
+        if (hostgroupFragment == null) {
+            hostgroupFragment = new HostgroupFragment();
+        }
         android.app.FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        hostgroupFragment.subscribeToHostsGroup(mainActivityPresenter.getHostGroupeObseravable());
+    }
+
+    @Override
+    public void addMenuItem(String name) {
+        createDrawerMenu(name);
     }
 
     @Override
@@ -105,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void showError(String message) {
-
+        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
@@ -118,11 +128,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     }
 
-
-
-    //Close Drawer if opened on Back Press
     @Override
     public void onBackPressed() {
+        //Close Drawer if opened on Back Press
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -132,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void goBack() {
-       super.onBackPressed();
+        super.onBackPressed();
     }
 
     class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -142,23 +150,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             navigationView.setCheckedItem(item.getItemId());
             switch (item.getItemId()) {
                 case R.id.show_hosts_group: {
-                    mainActivityPresenter.getHostsGroup();
+                    showHostgroupFragment(mainActivityPresenter.getHostGroupeObseravable());
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
 
                 case R.id.show_triggers: {
-
-                    startFragment();
-                    //hostgroupFragment.inflateView();
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
 
                 }
                 case R.id.show_test: {
-                    hostgroupFragment.inflateView();
                     Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     break;
@@ -173,20 +177,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 }
                 default: {
                     Log.d(TAG, "Default Item Pressed");
-//                    item.setChecked(true);
-//                   Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
-//                    toast.show();
                     break;
 
                 }
             }
 
-
-//            Toast toast = Toast.makeText(getApplicationContext(), "Item pressed " + item.toString(), Toast.LENGTH_SHORT);
-//            toast.show();
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         }
     }
 
 }
+
+
+//drawerLayout.closeDrawers();         close Drawer

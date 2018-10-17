@@ -1,5 +1,6 @@
 package ru.smeleyka.bgrebooter.view;
 
+import io.reactivex.Observable;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 
 public interface MainActivityView {
@@ -14,7 +15,7 @@ public interface MainActivityView {
 
     void addMenuItem(String name);
 
-    void addMenuItem(HostgroupGetResponse.Hostgroup hostgroup);
+    void showHostgroupFragment(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable);
 
     void goBack();
 
