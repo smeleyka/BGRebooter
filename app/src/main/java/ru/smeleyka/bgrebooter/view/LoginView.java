@@ -16,8 +16,6 @@ public interface LoginView {
 
     void hideLoading();
 
-    void startRebootActivity();
-
     void startMainActivity();
 
     void setLogin(String login);

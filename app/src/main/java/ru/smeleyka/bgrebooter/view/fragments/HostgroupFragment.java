@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -66,6 +67,7 @@ public class HostgroupFragment extends Fragment {
         }
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(myRecyclerViewAdapter);
+        recyclerView.addOnItemTouchListener();
     }
 
     public void addItemToRecyclerView(HostgroupGetResponse.Hostgroup hostgroup) {
@@ -84,11 +86,6 @@ public class HostgroupFragment extends Fragment {
 
         public MyRecyclerViewAdapter() {
             this.hostgroupList = new ArrayList<>();
-        }
-
-        public MyRecyclerViewAdapter(ArrayList<HostgroupGetResponse.Hostgroup> hostgroupList) {
-            this.hostgroupList = hostgroupList;
-            Log.d(TAG, "hostgroupList count= " + hostgroupList.size());
         }
 
         public void setItems(Collection<HostgroupGetResponse.Hostgroup> hostgroups) {
@@ -115,11 +112,6 @@ public class HostgroupFragment extends Fragment {
                                 mainActivityView.hideLoading();
                             }
                     );
-        }
-
-        public void clearItems() {
-            hostgroupList.clear();
-            notifyDataSetChanged();
         }
 
         @NonNull
@@ -173,6 +165,29 @@ public class HostgroupFragment extends Fragment {
 
         }
     }
+
+    class MyRecyclerViewOnItemTouchListener extends RecyclerView.SimpleOnItemTouchListener {
+
+        public MyRecyclerViewOnItemTouchListener() {
+            super();
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            return super.onInterceptTouchEvent(rv, e);
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            super.onTouchEvent(rv, e);
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            super.onRequestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+
+     }
 
 
 }

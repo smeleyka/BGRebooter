@@ -14,10 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +23,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
 import ru.smeleyka.bgrebooter.presenter.MainActivityPresenter;
-import ru.smeleyka.bgrebooter.presenter.RebootPresenter;
 import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
@@ -73,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         //Drawer menu click listener
         navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener());
 
-        if (hostgroupFragment == null) {
-            hostgroupFragment = new HostgroupFragment();
-        }
-        android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+//        if (hostgroupFragment == null) {
+//            hostgroupFragment = new HostgroupFragment();
+//        }
+//        android.app.FragmentManager fm = getFragmentManager();
+//        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
     }
 
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             hostgroupFragment = new HostgroupFragment();
         }
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitNow();
         hostgroupFragment.subscribeToHostsGroup(mainActivityPresenter.getHostGroupeObseravable());
     }
 
