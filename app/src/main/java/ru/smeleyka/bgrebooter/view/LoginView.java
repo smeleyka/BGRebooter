@@ -1,5 +1,7 @@
 package ru.smeleyka.bgrebooter.view;
 
+import ru.smeleyka.bgrebooter.presenter.MainActivityPresenter;
+
 /**
  * Created by smeleyka on 14.03.18.
  */
@@ -19,4 +21,5 @@ public interface LoginView {
     void startMainActivity();
 
     void setLogin(String login);
+
 }

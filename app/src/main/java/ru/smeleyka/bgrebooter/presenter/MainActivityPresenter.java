@@ -13,6 +13,7 @@ import ru.smeleyka.bgrebooter.model.data.DataManager;
 import ru.smeleyka.bgrebooter.model.data.GsonHelper;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetRequest;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
+import ru.smeleyka.bgrebooter.model.entity.HostsOfGroupGetResponse;
 import ru.smeleyka.bgrebooter.model.entity.ScriptExecuteRequest;
 import ru.smeleyka.bgrebooter.model.entity.ScriptExecuteResponse;
 import ru.smeleyka.bgrebooter.view.MainActivityView;
@@ -104,6 +105,15 @@ public class MainActivityPresenter {
 
     public Observable<HostgroupGetResponse.Hostgroup> getHostGroupeObseravable() {
         return dataManager.getHostGroupList(auth);
+    }
+
+    public Observable<HostsOfGroupGetResponse.Host> getHostsOfGroupeObseravable(int groupeId) {
+        return dataManager.getHostsOfGroupList(auth,groupeId);
+    }
+
+
+    public void onGroupeFragmentClick(int groupId){
+        mainActivityView.showHostsFragment(getHostsOfGroupeObseravable(groupId));
     }
 
     public void cleanAuth() {

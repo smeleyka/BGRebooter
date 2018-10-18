@@ -19,24 +19,6 @@ public class HostgroupGetResponse extends ZabbixApiObject {
         this.hostgroup = result;
     }
 
-    public List<Hostgroup> getHostgroupList() {
-        if (hostgroup == null) {
-            return null;
-        }
-        return converter(hostgroup);
-    }
-
-    private List<Hostgroup> converter(Hostgroup hostgroup) {
-        ArrayList<Hostgroup> hostgroupList = new ArrayList<>();
-        hostgroupList.add(hostgroup);
-        return hostgroupList;
-    }
-
-    private List<Hostgroup> converter(Hostgroup[] hostgroup) {
-        ArrayList<Hostgroup> hostgroupList = new ArrayList<>(Arrays.asList(hostgroup));
-        return hostgroupList;
-    }
-
     public class Hostgroup {
         int groupid;
         String name;

@@ -2,17 +2,19 @@ package ru.smeleyka.bgrebooter.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class HostgroupGetRequest extends ZabbixApiRequest {
+import java.util.ArrayList;
+
+public class HostsOfGroupGetRequest extends ZabbixApiRequest {
     private Params params;
 
-    public HostgroupGetRequest(String auth) {
+    public HostsOfGroupGetRequest(String auth, int groupId) {
         this.params = new Params();
-        params.setRealHosts(1);
-        params.setOutput("extend");
+        params.setGroupids(""+groupId);
+        params.addOutputParam("hostid", "name", "host", "status");
         params.setSortfield("name");
         params.setSortorder("ASC");
         setAuth(auth);
-        setMethod("hostgroup.get");
+        setMethod("host.get");
     }
 
     public Params getParams() {
@@ -24,40 +26,35 @@ public class HostgroupGetRequest extends ZabbixApiRequest {
     }
 
     private class Params {
-        int realHosts;
-        String output;
-        @SerializedName("selectHosts")
-        SelectHosts selectHosts;
 
+        String groupids;
+        ArrayList<String> output;
         String sortfield;
         String sortorder;
 
-        public Params() {
-            this.selectHosts = new SelectHosts();
-        }
-
-        public int getRealHosts() {
-            return realHosts;
-        }
-
-        public void setRealHosts(int realHosts) {
-            this.realHosts = realHosts;
-        }
-
-        public String getOutput() {
+        public ArrayList<String> getOutput() {
             return output;
         }
 
-        public void setOutput(String output) {
+        public void setOutput(ArrayList<String> output) {
             this.output = output;
         }
 
-        public SelectHosts getSelectHosts() {
-            return selectHosts;
+        public void addOutputParam(String... param) {
+            if (this.output == null) {
+                this.output = new ArrayList<>();
+            }
+            for (String p : param) {
+                output.add(p);
+            }
         }
 
-        public void setSelectHosts(SelectHosts selectHosts) {
-            this.selectHosts = selectHosts;
+        public String getGroupids() {
+            return groupids;
+        }
+
+        public void setGroupids(String groupids) {
+            this.groupids = groupids;
         }
 
         public String getSortfield() {

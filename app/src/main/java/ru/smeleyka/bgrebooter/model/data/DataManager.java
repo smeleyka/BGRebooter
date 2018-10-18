@@ -10,10 +10,14 @@ import javax.inject.Singleton;
 
 import dagger.Provides;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.internal.operators.observable.ObservableAll;
+import io.reactivex.schedulers.Schedulers;
 import ru.smeleyka.bgrebooter.model.api.ZabbixRequest;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetRequest;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
+import ru.smeleyka.bgrebooter.model.entity.HostsOfGroupGetRequest;
+import ru.smeleyka.bgrebooter.model.entity.HostsOfGroupGetResponse;
 
 @Singleton
 public class DataManager {
@@ -68,5 +72,19 @@ public class DataManager {
         return observableGroupe;
 
     }
+    public Observable<HostsOfGroupGetResponse.Host> getHostsOfGroupList(String auth, int groupId) {
+        String scriptRequest = gsonHelper.toJson(new HostsOfGroupGetRequest(auth,groupId));
+        Log.d(TAG, scriptRequest);
+        Observable<HostsOfGroupGetResponse.Host> observableHost =
+                zabbixRequest.senRequestToZabbixServer(scriptRequest).subscribeOn(Schedulers.computation())
+                        .flatMap(s -> {
+                            Log.d(TAG, s);
+                            HostsOfGroupGetResponse hostsOfGroupGetResponse = gsonHelper.fromJson(s, HostsOfGroupGetResponse.class);
+                            return Observable.fromArray(hostsOfGroupGetResponse.getHosts());
+                        });
+        return observableHost;
+
+    }
+
 }
 

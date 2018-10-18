@@ -22,13 +22,16 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
+import ru.smeleyka.bgrebooter.model.entity.HostsOfGroupGetResponse;
 import ru.smeleyka.bgrebooter.presenter.MainActivityPresenter;
 import ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment;
+import ru.smeleyka.bgrebooter.view.fragments.HostsFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView {
     String TAG = "MainActivity.class";
     MainActivityPresenter mainActivityPresenter;
     HostgroupFragment hostgroupFragment;
+    HostsFragment hostsFragment;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -89,13 +92,37 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
+    public MainActivityPresenter getPresenter() {
+        return this.mainActivityPresenter;
+    }
+
+    @Override
+    public Observable<HostsOfGroupGetResponse.Host> getHostOfGroup(int groupId) {
+        return mainActivityPresenter.getHostsOfGroupeObseravable(groupId);
+    }
+
+
+    @Override
     public void showHostgroupFragment(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
         if (hostgroupFragment == null) {
             hostgroupFragment = new HostgroupFragment();
         }
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitNow();
+        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack("GroupFragment").commitNow();
         hostgroupFragment.subscribeToHostsGroup(mainActivityPresenter.getHostGroupeObseravable());
+        showError(""+fm.getBackStackEntryCount());
+    }
+
+    @Override
+    public void showHostsFragment(Observable<HostsOfGroupGetResponse.Host> hostObservable) {
+        if (hostsFragment == null) {
+            hostsFragment = new HostsFragment();
+        }
+        android.app.FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.fragment_container, hostsFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitNow();
+        hostsFragment.subscribeToHostsOfGroup(hostObservable);
+        showError(""+fm.getBackStackEntryCount());
+
     }
 
     @Override
@@ -136,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void goBack() {
-        super.onBackPressed();
+        onBackPressed();
     }
 
     class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {

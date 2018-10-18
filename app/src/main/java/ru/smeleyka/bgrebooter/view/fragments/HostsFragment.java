@@ -18,15 +18,15 @@ import java.util.Collection;
 import java.util.List;
 
 import io.reactivex.Observable;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.smeleyka.bgrebooter.R;
 import ru.smeleyka.bgrebooter.model.entity.HostgroupGetResponse;
+import ru.smeleyka.bgrebooter.model.entity.HostsOfGroupGetResponse;
 import ru.smeleyka.bgrebooter.view.MainActivityView;
 
-public class HostgroupFragment extends Fragment {
+public class HostsFragment extends Fragment {
 
-    private String TAG = "HostgroupFragment.class";
+    private String TAG = "HostsFragment.class";
 
     Context mContext;
 
@@ -65,39 +65,25 @@ public class HostgroupFragment extends Fragment {
         recyclerView.setAdapter(myRecyclerViewAdapter);
     }
 
-    public void addItemToRecyclerView(HostgroupGetResponse.Hostgroup hostgroup) {
-        myRecyclerViewAdapter.setItemByOne(hostgroup);
-    }
-
-    public void subscribeToHostsGroup(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
-        myRecyclerViewAdapter.setItemSubscription(hostgroupObservable);
+    public void subscribeToHostsOfGroup(Observable<HostsOfGroupGetResponse.Host> hostObservable) {
+        myRecyclerViewAdapter.setItemSubscription(hostObservable);
     }
 
     class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> implements View.OnClickListener {
         private String TAG = "MyRecyclerViewAdapter.class";
 
-        List<HostgroupGetResponse.Hostgroup> hostgroupList;
+        List<HostsOfGroupGetResponse.Host> hostList;
 
         public MyRecyclerViewAdapter() {
-            this.hostgroupList = new ArrayList<>();
+            this.hostList = new ArrayList<>();
         }
 
-        public void setItems(Collection<HostgroupGetResponse.Hostgroup> hostgroups) {
-            hostgroupList.addAll(hostgroups);
-            notifyDataSetChanged();
-        }
 
-        public void setItemByOne(HostgroupGetResponse.Hostgroup hostgroup) {
-            hostgroupList.add(hostgroup);
-            notifyDataSetChanged();
-            Log.d(TAG, "hostgroupList count= " + hostgroupList.size());
-        }
-
-        public void setItemSubscription(Observable<HostgroupGetResponse.Hostgroup> hostgroupObservable) {
-            hostgroupObservable.observeOn(AndroidSchedulers.mainThread())
+        public void setItemSubscription(Observable<HostsOfGroupGetResponse.Host> hostObservable) {
+            hostObservable.observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             s -> {
-                                hostgroupList.add(s);
+                                hostList.add(s);
                                 notifyDataSetChanged();
                             },
                             throwable -> {
@@ -118,24 +104,19 @@ public class HostgroupFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.bind(hostgroupList.get(position));
+            holder.bind(hostList.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return hostgroupList.size();
+            return hostList.size();
         }
 
         @Override
         public void onClick(View v) {
             MyViewHolder viewHolder = (MyViewHolder) v.getTag();
             int position = viewHolder.getLayoutPosition();
-            HostgroupGetResponse.Hostgroup hostgroup = hostgroupList.get(position);
-            mainActivityView.getPresenter().onGroupeFragmentClick(hostgroup.getGroupid());
-//            mainActivityView.getHostOfGroup(position).observeOn(AndroidSchedulers.mainThread()).subscribe(host -> {
-//                mainActivityView.showError("Clicked " + host.getName());
-//                    }
-//            );
+            mainActivityView.showError("Clicked " + hostList.get(position).getName());
         }
     }
 
@@ -144,6 +125,7 @@ public class HostgroupFragment extends Fragment {
         //private MyRecyclerViewAdapter myRecyclerViewAdapter;
 
         TextView groupeNameTextView;
+        TextView secondText;
         TextView groupeIdTextView;
         TextView groupeHostsCountTextView;
         TextView groupeImgTextView;
@@ -157,6 +139,7 @@ public class HostgroupFragment extends Fragment {
             Log.d(TAG, "LayoutParams of view is null: " + (itemView.getLayoutParams() == null));
             groupeNameTextView = itemView.findViewById(R.id.recycler_item_text_first);
             groupeIdTextView = itemView.findViewById(R.id.recycler_item_text_groupe_id);
+            secondText = itemView.findViewById(R.id.recycler_item_text_second);
             groupeHostsCountTextView = itemView.findViewById(R.id.recycler_item_text_host_count);
             groupeImgTextView = itemView.findViewById(R.id.recycler_item_image);
             itemView.setTag(this);
@@ -164,12 +147,12 @@ public class HostgroupFragment extends Fragment {
 
         }
 
-        public void bind(HostgroupGetResponse.Hostgroup hostgroup) {
+        public void bind(HostsOfGroupGetResponse.Host host) {
 
-            groupeImgTextView.setText("" + hostgroup.getName().charAt(0));
-            groupeNameTextView.setText("" + hostgroup.getName());
-            groupeIdTextView.setText("id: " + hostgroup.getGroupid());
-            groupeHostsCountTextView.setText("hosts: " + hostgroup.getHosts().length);
+            groupeImgTextView.setText("" + host.getName().charAt(0));
+            groupeNameTextView.setText("" + host.getName());
+            secondText.setText(""+ host.getHost());
+            groupeIdTextView.setText("active: " + host.getStatus());
 
         }
     }
