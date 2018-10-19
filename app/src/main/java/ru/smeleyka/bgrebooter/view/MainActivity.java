@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             hostgroupFragment = new HostgroupFragment();
         }
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack("GroupFragment").commitNow();
+        fm.beginTransaction().replace(R.id.fragment_container, hostgroupFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         hostgroupFragment.subscribeToHostsGroup(mainActivityPresenter.getHostGroupeObseravable());
         showError(""+fm.getBackStackEntryCount());
     }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             hostsFragment = new HostsFragment();
         }
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_container, hostsFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitNow();
+        fm.beginTransaction().replace(R.id.fragment_container, hostsFragment, "TAG").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         hostsFragment.subscribeToHostsOfGroup(hostObservable);
         showError(""+fm.getBackStackEntryCount());
 

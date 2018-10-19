@@ -12,7 +12,7 @@ android {
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
         }
-           }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
 
     implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     testImplementation 'junit:junit:4.12'
@@ -62,4 +63,5 @@ dependencies {
     implementation 'com.google.dagger:dagger-android:2.16'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.16'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
 }

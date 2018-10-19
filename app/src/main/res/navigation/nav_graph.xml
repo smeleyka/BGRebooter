@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/loginActivity">
+
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="ru.smeleyka.bgrebooter.view.LoginActivity"
+        android:label="login_activity"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="ru.smeleyka.bgrebooter.view.MainActivity"
+        android:label="main_activity"
+        tools:layout="@layout/main_activity" />
+    <fragment
+        android:id="@+id/hostsFragment"
+        android:name="ru.smeleyka.bgrebooter.view.fragments.HostsFragment"
+        android:label="fragment_layout"
+        tools:layout="@layout/fragment_layout" />
+    <fragment
+        android:id="@+id/hostgroupFragment"
+        android:name="ru.smeleyka.bgrebooter.view.fragments.HostgroupFragment"
+        android:label="fragment_layout"
+        tools:layout="@layout/fragment_layout" >
+        <action
+            android:id="@+id/action_hostgroupFragment_to_hostsFragment"
+            app:destination="@id/hostsFragment" />
+    </fragment>
+</navigation>
